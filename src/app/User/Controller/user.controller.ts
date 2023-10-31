@@ -2,6 +2,7 @@ import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestj
 import { UserService } from '../Service/user.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { user } from 'src/app/entity';
 
 @Controller('user')
 export class UserController {
@@ -19,11 +20,15 @@ export class UserController {
     async findAll(){
         return await this.userService.findAll();
     }
-
     @Get('/:id')
     async findOne(@Param('id',ParseIntPipe) id: number){
         return await this.userService.findOne(id);
     }
 
-    
+    @Post('/create')
+    async create(@Body() userNew:CreateUserDto):Promise<user>{
+        userNew.createAt = new Date().toISOString()
+        userNew.otp = '654333'
+        return await this.userService.create(userNew)
+    }
 }

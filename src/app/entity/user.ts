@@ -6,6 +6,7 @@ export interface userAttributes {
     email: string;
     password: string;
     status?: number;
+    otp:string;
     createAt: string;
     updateAt?: string;
     deleteAt?: string;
@@ -21,6 +22,8 @@ export class user extends Model<userAttributes, userAttributes> implements userA
     password!: string;
     @Column({ type: DataType.INTEGER, defaultValue: 1 })
     status?: number;
+    @Column({type:DataType.INTEGER,unique:true})
+    otp: string;
     @Column({ type: DataType.STRING(255) })
     createAt!: string;
     @Column({ allowNull: true, type: DataType.STRING(255) })

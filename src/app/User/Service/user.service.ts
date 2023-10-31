@@ -18,4 +18,15 @@ export class UserService {
     return await this.userRepository.findOne({ where: { id: id } });
   }
 
+  async findOneByEmail(email: string): Promise<user> {
+    return await this.userRepository.findOne({ where: { email: email } });
+  }
+
+  async create(userNew : CreateUserDto):Promise<user>{
+    // let newUser = new user()
+    // for(const key in userNew){
+    //   newUser[key] = userNew[key]
+    // }
+    return await this.userRepository.create(userNew);
+  }
 }

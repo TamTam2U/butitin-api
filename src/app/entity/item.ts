@@ -1,4 +1,5 @@
 import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
+import { CreateItemDto } from "../Menu/dtos/CreateMenu.dto";
 
 export interface itemAttributes {
     id?: number;
@@ -14,6 +15,9 @@ export interface itemAttributes {
 
 @Table({ tableName: "item", timestamps: false })
 export class item extends Model<itemAttributes, itemAttributes> implements itemAttributes {
+    static edit(itemNew: CreateItemDto): item | PromiseLike<item> {
+        throw new Error('Method not implemented.');
+    }
     @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })
     id?: number;
     @Column({ type: DataType.STRING(255) })
