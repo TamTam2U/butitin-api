@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { category, item, user } from '../entity';
+import { applicant, category, item, user } from '../entity';
 
 export const databaseProviders = [
   {
@@ -13,7 +13,7 @@ export const databaseProviders = [
         password: '',
         database: 'kedaibutitin',
       });
-      sequelize.addModels([user,item,category]);
+      sequelize.addModels([user,item,category,applicant]);
       await sequelize.sync();
       return sequelize;
     },
