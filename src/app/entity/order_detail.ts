@@ -1,4 +1,4 @@
-import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
+import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey, HasMany } from "sequelize-typescript";
 
 export interface order_detailAttributes {
     id?: number;
@@ -10,7 +10,6 @@ export interface order_detailAttributes {
     updateAt?: string;
     deleteAt?: string;
 }
-
 @Table({ tableName: "order_detail", timestamps: false })
 export class order_detail extends Model<order_detailAttributes, order_detailAttributes> implements order_detailAttributes {
     @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })

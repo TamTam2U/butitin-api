@@ -1,11 +1,11 @@
+import { Exclude, Expose } from "class-transformer";
 import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
-import { Entity } from "typeorm";
 
 export interface userAttributes {
     id?: number;
     email: string;
     password: string;
-    status?: number;
+    status?: string;
     otp:string;
     createAt: string;
     updateAt?: string;
@@ -20,8 +20,8 @@ export class user extends Model<userAttributes, userAttributes> implements userA
     email!: string;
     @Column({ type: DataType.STRING(255) })
     password!: string;
-    @Column({ type: DataType.INTEGER, defaultValue: 1 })
-    status?: number;
+    @Column({ type: DataType.STRING(255), defaultValue: 'USER' })
+    status?: string;
     @Column({type:DataType.INTEGER,unique:true})
     otp: string;
     @Column({ type: DataType.STRING(255) })

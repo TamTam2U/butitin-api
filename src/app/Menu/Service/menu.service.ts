@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { category, item } from 'src/app/entity';
 import { CreateItemDto } from '../dtos/CreateMenu.dto';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
@@ -114,9 +114,19 @@ export class MenuService {
     }
   }
 
-  async getItemByCategory(id: number): Promise<item[]> {
-    return await this.itemRepository.findAll<item>({
+  async getItemByCategory(id: number): Promise<item[] | any> {
+    let item = await this.itemRepository.findAll<item>({
       where: { categoryId: id },
     });
+    let category = this.categoryRepository.findByPk(id)
+    let dataResponse = {
+        "category" : (await category).name,
+        "data" : item
+    }
+    if(item) {
+      return dataResponse
+    }else{
+      throw new NotFoundException
+    }
   }
 }
