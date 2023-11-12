@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ClassSerializerInterceptor,
   Inject,
   Injectable,
@@ -10,6 +11,8 @@ import { Exclude } from 'class-transformer';
 import { UserService } from 'src/app/User/Service/user.service';
 import { CreateUserDto } from 'src/app/User/dtos/CreateUser.dto';
 import { user } from 'src/app/entity';
+import { RegisterDto } from '../dtos/Register.dto';
+import { ValidationFailed } from 'sequelize-typescript';
 
 @Injectable()
 export class AuthService {
@@ -35,8 +38,19 @@ export class AuthService {
     }
   }
 
-  async register(userNew:CreateUserDto):Promise<user>{
-    return await this.UserService.create(userNew);
+  async register(userNew:RegisterDto):Promise<user|any|void>{
+    try{
+      userNew.createAt = new Date().toISOString()
+      userNew.otp = Math.floor(100000 + Math.random() * 900000).toString()
+      userNew.status = 'user'
+      if(await this.UserService.create(userNew)){
+        return userNew
+      }else{
+        return false
+      }
+    }catch(err){
+      throw new BadRequestException(err)
+    }
   }
 
   async getOtp(id: number): Promise<any> {

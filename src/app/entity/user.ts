@@ -1,12 +1,12 @@
-import { Exclude, Expose } from "class-transformer";
 import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
 
 export interface userAttributes {
     id?: number;
+    name?: string;
     email: string;
     password: string;
     status?: string;
-    otp:string;
+    otp: string;
     createAt: string;
     updateAt?: string;
     deleteAt?: string;
@@ -16,14 +16,16 @@ export interface userAttributes {
 export class user extends Model<userAttributes, userAttributes> implements userAttributes {
     @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })
     id?: number;
-    @Column({ type: DataType.STRING(255)})
+    @Column({ type: DataType.STRING(255), defaultValue: "user" })
+    name?: string;
+    @Column({ type: DataType.STRING(255) })
     email!: string;
     @Column({ type: DataType.STRING(255) })
     password!: string;
-    @Column({ type: DataType.STRING(255), defaultValue: 'USER' })
+    @Column({ type: DataType.STRING(50), defaultValue: "user" })
     status?: string;
-    @Column({type:DataType.INTEGER,unique:true})
-    otp: string;
+    @Column({ type: DataType.STRING(255) })
+    otp!: string;
     @Column({ type: DataType.STRING(255) })
     createAt!: string;
     @Column({ allowNull: true, type: DataType.STRING(255) })

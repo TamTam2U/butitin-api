@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { UserService } from '../Service/user.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { user } from 'src/app/entity';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
     constructor(
@@ -11,7 +12,6 @@ export class UserController {
     ) {
         
     }
-
     @ApiOkResponse({
         status: 200,
         description: 'Get all user',

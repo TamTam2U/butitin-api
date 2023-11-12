@@ -13,7 +13,9 @@ import { CreateItemDto } from '../dtos/CreateMenu.dto';
 import { category, item } from 'src/app/entity';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { EditCategoryDto } from '../dtos/EditCategory.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Menu')
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}

@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApplicantService } from '../Service/applicant.service';
 import { CreateApplicantDto } from '../dtos/CreateApplicant.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Applicant')
 @Controller('applicant')
 export class ApplicantController {
     constructor(private readonly applicantService : ApplicantService){}
