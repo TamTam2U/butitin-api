@@ -1,35 +1,44 @@
-import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Applicant } from "./Applicant";
 
-export interface userAttributes {
-    id?: number;
-    name?: string;
-    email: string;
-    password: string;
-    status?: string;
-    otp: string;
-    createAt: string;
-    updateAt?: string;
-    deleteAt?: string;
-}
+@Index("email", ["email"], { unique: true })
+@Entity("user", { schema: "butitin" })
+export class User {
+  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  id: string;
 
-@Table({ tableName: "user", timestamps: false })
-export class user extends Model<userAttributes, userAttributes> implements userAttributes {
-    @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })
-    id?: number;
-    @Column({ type: DataType.STRING(255), defaultValue: "user" })
-    name?: string;
-    @Column({ type: DataType.STRING(255) })
-    email!: string;
-    @Column({ type: DataType.STRING(255) })
-    password!: string;
-    @Column({ type: DataType.STRING(50), defaultValue: "user" })
-    status?: string;
-    @Column({ type: DataType.STRING(255) })
-    otp!: string;
-    @Column({ type: DataType.STRING(255) })
-    createAt!: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    updateAt?: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    deleteAt?: string;
+  @Column("varchar", { name: "name", length: 255, default: () => "'user'" })
+  name: string;
+
+  @Column("varchar", { name: "email", unique: true, length: 255 })
+  email: string;
+
+  @Column("varchar", { name: "password", length: 255 })
+  password: string;
+
+  @Column("varchar", { name: "status", length: 50, default: () => "'user'" })
+  status: string;
+
+  @Column("varchar", { name: "otp", length: 255 })
+  otp: string;
+
+  @Column("varchar", { name: "createAt", length: 255 })
+  createAt: string | Date;
+
+  @Column("varchar", { name: "updateAt", nullable: true, length: 255 })
+  updateAt: string | null | Date;
+
+  @Column("varchar", { name: "deleteAt", nullable: true, length: 255 })
+  @DeleteDateColumn()
+  deleteAt: string | null | Date;
+
+  @OneToMany(() => Applicant, (applicant) => applicant.userId)
+  applicants: Applicant[];
 }

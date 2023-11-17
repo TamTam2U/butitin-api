@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class EditCategoryDto {
+export class SetStatusDto {
     @ApiProperty()
-    name: string;
-
+    id:string
 }

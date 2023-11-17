@@ -7,13 +7,17 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { MenuService } from '../Service/menu.service';
-import { CreateItemDto } from '../dtos/CreateMenu.dto';
-import { category, item } from 'src/app/entity';
+import { CreateItemDto } from '../dtos/CreateItemdto';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { EditCategoryDto } from '../dtos/EditCategory.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from 'src/app/guards/jwt.guard';
+import { Int32 } from 'typeorm';
+import { EditItemDto } from '../dtos/EditItem.dto';
 
 @ApiTags('Menu')
 @Controller('menu')
@@ -31,55 +35,109 @@ export class MenuController {
   }
 
   @Get('/oneItem/:id')
-  async findOneItem(@Param('id', ParseIntPipe) id: number) {
+  async findOneItem(@Param('id', ParseIntPipe) id: string) {
     return await this.menuService.findOneItem(id);
   }
 
   @Get('/oneCategory/:id')
-  async findOneCategory(id: number) {
+  async findOneCategory(@Param('id') id: string) {
     return await this.menuService.findOneCategory(id);
   }
 
-  @Post('/createItem')
-  async createItem(@Body() itemNew: CreateItemDto): Promise<item> {
-    return await this.menuService.createItem(itemNew);
+  @Get('/oneItemByCategoryId/:id')
+  async findAllItemByCategoryId(id: string): Promise<any> {
+    return await this.menuService.findAllItemByCategoryId(id);
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
+  @Post('/createItem')
+  async createItem(@Body() newItem: CreateItemDto, @Req() req) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.createItem(newItem);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
   @Put('/editItem/:id')
   async editItem(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() itemNew: CreateItemDto,
-  ): Promise<item | undefined> {
-    return await this.menuService.editItem(id, itemNew);
+    @Param('id') id: string,
+    @Body() editItem: EditItemDto,
+    @Req() req,
+  ) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.editItem(id, editItem);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
   @Delete('/deleteItem/:id')
-  async deleteItem(@Param('id', ParseIntPipe) id: number) {
-    return await this.menuService.deleteItem(id);
+  async deleteItem(@Param('id') id: string, @Req() req) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.deleteItem(id);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
   @Post('/createCategory')
-  async createCategory(
-    @Body() categoryNew: CreateCategoryDto,
-  ): Promise<category> {
-    return await this.menuService.createCategory(categoryNew);
+  async createCategory(@Body() newCategory: CreateCategoryDto, @Req() req) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.createCategory(newCategory);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
   @Put('/editCategory/:id')
   async editCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() categoryNew: EditCategoryDto,
-  ): Promise<category | undefined> {
-    return await this.menuService.editCategory(id, categoryNew);
+    @Param('id') id: string,
+    @Body() editCategory: EditCategoryDto,
+    @Req() req,
+  ) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.editCategory(id, editCategory);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtGuard)
   @Delete('/deleteCategory/:id')
-  async deleteCategory(@Param('id', ParseIntPipe) id: number) {
-    return await this.menuService.deleteCategory(id);
-  }
-
-  @Get('/itemByCategory/:id')
-  async itemByCategory(@Param('id', ParseIntPipe) id: number) {
-    return await this.menuService.getItemByCategory(id);
+  async deleteCategory(@Param('id') id: string, @Req() req) {
+    if (req.user.status === 'owner' || req.user.status === 'admin') {
+      return await this.menuService.deleteCategory(id);
+    } else {
+      return {
+        status: 401,
+        message: 'Anda Tidak Memiliki Akses',
+      };
+    }
   }
 }

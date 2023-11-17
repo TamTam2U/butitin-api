@@ -1,35 +1,39 @@
-import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { OrderDetail } from "./OrderDetail";
 
-export interface orderAttributes {
-    id?: number;
-    noInvoice: string;
-    orderDate: string;
-    status?: string;
-    name: string;
-    total: string;
-    createAt: string;
-    updateAt?: string;
-    deleteAt?: string;
-}
+@Entity("order", { schema: "butitin" })
+export class Order {
+  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  id: string;
 
-@Table({ tableName: "order", timestamps: false })
-export class order extends Model<orderAttributes, orderAttributes> implements orderAttributes {
-    @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })
-    id?: number;
-    @Column({ type: DataType.STRING(255) })
-    noInvoice!: string;
-    @Column({ type: DataType.STRING(255) })
-    orderDate!: string;
-    @Column({ type: DataType.STRING(255), defaultValue: "pending" })
-    status?: string;
-    @Column({ type: DataType.STRING(255) })
-    name!: string;
-    @Column({ type: DataType.STRING(255) })
-    total!: string;
-    @Column({ type: DataType.STRING(255) })
-    createAt!: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    updateAt?: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    deleteAt?: string;
+  @Column("varchar", { name: "noInvoice", length: 255 })
+  noInvoice: string;
+
+  @Column("varchar", { name: "orderDate", length: 255 })
+  orderDate: string;
+
+  @Column("varchar", {
+    name: "status",
+    length: 255,
+    default: () => "'pending'",
+  })
+  status: string;
+
+  @Column("varchar", { name: "name", length: 255 })
+  name: string;
+
+  @Column("varchar", { name: "total", length: 255 })
+  total: string;
+
+  @Column("varchar", { name: "createAt", length: 255 })
+  createAt: string;
+
+  @Column("varchar", { name: "updateAt", nullable: true, length: 255 })
+  updateAt: string | null;
+
+  @Column("varchar", { name: "deleteAt", nullable: true, length: 255 })
+  deleteAt: string | null;
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
+  orderDetails: OrderDetail[];
 }

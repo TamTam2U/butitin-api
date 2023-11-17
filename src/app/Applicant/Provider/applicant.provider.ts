@@ -1,8 +1,8 @@
-import { applicant } from "src/app/entity";
+// import { applicant } from "src/app/entity";
 
-export const ApplicantProvider = [
-    {
-        provide: 'APPLICANT_REPOSITORY',
-        useValue: applicant,
-    }
-];
+// export const ApplicantProvider = [
+//     {
+//         provide: 'APPLICANT_REPOSITORY',
+//         useValue: applicant,
+//     }
+// ]

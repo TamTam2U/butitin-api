@@ -1,33 +1,42 @@
-import { BadRequestException, HttpException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { user } from 'src/app/entity';
+// import { user } from 'src/app/entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
+import { EmailUserDto } from '../dtos/FindUserByEmail.dto';
+import { User } from 'src/app/entity/User';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('USER_REPOSITORY') private userRepository: typeof user,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<user[]> {
-    return await this.userRepository.findAll<user>();
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find({ where: { deleteAt: null } });
   }
 
-  async findOne(id: number): Promise<user> {
-    let user = await this.userRepository.findByPk(id)
-    if(user){
-      return user
-    }else{
-      throw new NotFoundException
+  async findOne(id: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { id: id } });
+  }
+
+  async findOneByEmail(email: EmailUserDto): Promise<User> {
+    return await this.userRepository.findOne({
+      where: { email: email.email },
+    });
+  }
+
+  async create(userNew: CreateUserDto): Promise<User> {
+    const user = new User();
+    for (const key in userNew) {
+      user[key] = userNew[key];
     }
-  }
-
-  async findOneByEmail(email: string): Promise<user> {
-    return await this.userRepository.findOne({ where: { email: email ,deleteAt: null} });
-  }
-
-  async create(userNew : CreateUserDto):Promise<user>{
-    return await this.userRepository.create(userNew);
+    return await this.userRepository.save(user);
   }
 }

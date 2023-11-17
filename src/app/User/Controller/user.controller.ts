@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../Service/user.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { user } from 'src/app/entity';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { EmailUserDto } from '../dtos/FindUserByEmail.dto';
+import { User } from 'src/app/entity/User';
+import { JwtGuard } from 'src/app/guards/jwt.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -16,19 +18,27 @@ export class UserController {
         status: 200,
         description: 'Get all user',
     })
+    @ApiBearerAuth('JWT-auth')
+    @UseGuards(JwtGuard)
     @Get('/all')
-    async findAll(){
+    async findAll(@Req() req):Promise<User[]> {
+        console.log(req.user.id);
         return await this.userService.findAll();
     }
     @Get('/:id')
-    async findOne(@Param('id',ParseIntPipe) id: number){
+    async findOne(@Param('id',ParseIntPipe) id: string){
         return await this.userService.findOne(id);
     }
 
     @Post('/create')
-    async create(@Body() userNew:CreateUserDto):Promise<user>{
+    async create(@Body() userNew:CreateUserDto):Promise<User>{
         userNew.createAt = new Date().toISOString()
         userNew.otp = '654333'
         return await this.userService.create(userNew)
+    }
+
+    @Post('/findByEmail')
+    async findByEmail(@Body() email:EmailUserDto):Promise<User>{
+        return await this.userService.findOneByEmail(email);
     }
 }

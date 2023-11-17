@@ -1,23 +1,24 @@
-import { Model, Table, Column, DataType, Index, Sequelize, ForeignKey } from "sequelize-typescript";
+import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Item } from './Item';
 
-export interface categoryAttributes {
-    id?: number;
-    name: string;
-    createAt: string;
-    updateAt?: string;
-    deleteAt?: string;
-}
+@Entity('category', { schema: 'butitin' })
+export class Category {
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
+  id: string;
 
-@Table({ tableName: "category", timestamps: false })
-export class category extends Model<categoryAttributes, categoryAttributes> implements categoryAttributes {
-    @Column({ primaryKey: true, autoIncrement: true, type: DataType.BIGINT })
-    id?: number;
-    @Column({ type: DataType.STRING(255) })
-    name!: string;
-    @Column({ type: DataType.STRING(255) })
-    createAt!: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    updateAt?: string;
-    @Column({ allowNull: true, type: DataType.STRING(255) })
-    deleteAt?: string;
+  @Column('varchar', { name: 'name', length: 255 })
+  name: string;
+
+  @Column('varchar', { name: 'createAt', length: 255 })
+  createAt: string | Date;
+
+  @Column('varchar', { name: 'updateAt', nullable: true, length: 255 })
+  updateAt: string | Date | null;
+
+  @Column('varchar', { name: 'deleteAt', nullable: true, length: 255 })
+  @DeleteDateColumn()
+  deleteAt: string | Date | null;
+
+  @OneToMany(() => Item, (item) => item.category)
+  items: Item[];
 }

@@ -2,13 +2,17 @@ import { UserController } from './Controller/user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './Service/user.service';
 import { Module } from '@nestjs/common';
-import { user } from '../entity';
-import { DatabaseSModule } from '../utils/database.module';
-import { UserProviders } from './Provider/user.provider';
+import { User } from '../entity/User';
+import { JwtStrategy } from '../strategies';
+// import { DatabaseSModule } from '../utils/database.module';
+// import { UserProviders } from './Provider/user.provider';
+// import { JwtStrategy } from '../strategies/jwt-strategy';
+// import { LocalStrategy } from '../strategies/local-strategy';
 
 @Module({
-  imports: [DatabaseSModule],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [UserService,...UserProviders],
+  providers: [UserService,JwtStrategy],
+  exports: [UserService,TypeOrmModule.forFeature([User])],
 })
 export class UserModule {}
