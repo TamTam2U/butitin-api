@@ -20,6 +20,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/app/entity/User';
 import * as otpGenerator from 'otp-generator';
 import { Repository } from 'typeorm';
+import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 
 @Injectable()
 export class AuthService {
@@ -140,8 +141,8 @@ export class AuthService {
       try {
         user.password = newPassword;
         user.updateAt = new Date().toISOString();
-        if(await this.userRepository.save(user)){
-          return user
+        if (await this.userRepository.save(user)) {
+          return user;
         }
       } catch (error) {
         throw new Error('Gagal memperbarui kata sandi');
@@ -151,5 +152,28 @@ export class AuthService {
     }
   }
 
-
+  async refreshToken(refreshToken: RefreshTokenDto): Promise<any> {
+    try {
+      const decode = await this.jwtService.verify(refreshToken.refresh_token);
+      const payload = {
+        sub: {
+          id: decode.sub.id,
+        },
+        email: decode.email,
+        status: decode.status,
+      };
+      return {
+        status: 200,
+        data: {
+          access_token: this.jwtService.sign(payload, {
+            expiresIn: '1d',
+          })
+        },
+        message: 'login success',
+        error: [],
+      };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }

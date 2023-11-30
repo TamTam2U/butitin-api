@@ -18,6 +18,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from '../dtos/Register.dto';
 import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { LocalGuard } from 'src/app/guards/local.guard';
+import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -26,7 +27,7 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('/login')
-  async login(@Body() loginDto: loginDto,@Req() req): Promise<any> {
+  async login(@Body() loginDto: loginDto, @Req() req): Promise<any> {
     return await this.authService.login(loginDto.email, loginDto.password);
   }
 
@@ -53,15 +54,20 @@ export class AuthController {
         return false;
       }
     } catch (err) {
-      throw new err;
+      throw new err();
     }
   }
 
   @Post('/newPassword')
-  async newPassword(
-    @Body() newPassword: NewPasswordDto
-  ): Promise<any> {
-    return await this.authService.newPassword(newPassword.id, newPassword.password);
+  async newPassword(@Body() newPassword: NewPasswordDto): Promise<any> {
+    return await this.authService.newPassword(
+      newPassword.id,
+      newPassword.password,
+    );
   }
-  
+
+  @Post('/refreshToken')
+  async refreshToken(@Body() refreshToken: RefreshTokenDto) {
+    return await this.authService.refreshToken(refreshToken);
+  }
 }
