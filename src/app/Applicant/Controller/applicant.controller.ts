@@ -17,7 +17,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/app/guards/jwt.guard';
 import { SetStatusDto } from '../dtos/SetStatus.dto';
 @ApiTags('Applicant')
-@Controller('applicant')
+@Controller('/api/applicant')
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 

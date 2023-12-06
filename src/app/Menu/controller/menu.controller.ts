@@ -20,7 +20,7 @@ import { Int32 } from 'typeorm';
 import { EditItemDto } from '../dtos/EditItem.dto';
 
 @ApiTags('Menu')
-@Controller('menu')
+@Controller('/api/menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 

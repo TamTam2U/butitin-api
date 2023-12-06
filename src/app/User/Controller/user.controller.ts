@@ -7,7 +7,7 @@ import { User } from 'src/app/entity/User';
 import { JwtGuard } from 'src/app/guards/jwt.guard';
 
 @ApiTags('User')
-@Controller('user')
+@Controller('/api/user')
 export class UserController {
     constructor(
         private readonly userService: UserService

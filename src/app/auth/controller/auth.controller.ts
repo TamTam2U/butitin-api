@@ -21,7 +21,7 @@ import { LocalGuard } from 'src/app/guards/local.guard';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 
 @ApiTags('Auth')
-@Controller('auth')
+@Controller('/api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
