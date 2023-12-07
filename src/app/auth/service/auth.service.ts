@@ -93,8 +93,8 @@ export class AuthService {
     }
   }
 
-  async getOtp(id: string): Promise<any> {
-    const user = await this.UserService.findOne(id);
+  async getOtp(email: EmailUserDto): Promise<any> {
+    const user = await this.UserService.findOneByEmail(email);
     let response = {
       id: user.id,
       email: user.email,
@@ -139,10 +139,22 @@ export class AuthService {
         );
       }
       try {
+        user.otp = otpGenerator.generate(6, {
+          digits: true,
+          lowerCaseAlphabets: false,
+          upperCaseAlphabets: false,
+          specialChars: false,
+        });
         user.password = newPassword;
         user.updateAt = new Date().toISOString();
         if (await this.userRepository.save(user)) {
-          return user;
+          const response = {
+            status: 200,
+            message: 'Password Berhasil Reset',
+            data: [],
+            error: [],
+          }
+          return response;
         }
       } catch (error) {
         throw new Error('Gagal memperbarui kata sandi');
@@ -167,7 +179,7 @@ export class AuthService {
         data: {
           access_token: this.jwtService.sign(payload, {
             expiresIn: '1d',
-          })
+          }),
         },
         message: 'login success',
         error: [],

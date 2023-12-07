@@ -1,10 +1,12 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Order } from "./Order";
 import { Item } from "./Item";
@@ -32,13 +34,15 @@ export class OrderDetail {
   orderDate: string;
 
   @Column("varchar", { name: "createAt", length: 255 })
-  createAt: string;
+  createAt: string | Date;
 
   @Column("varchar", { name: "updateAt", nullable: true, length: 255 })
-  updateAt: string | null;
+  @UpdateDateColumn()
+  updateAt: string | null | Date;
 
   @Column("varchar", { name: "deleteAt", nullable: true, length: 255 })
-  deleteAt: string | null;
+  @DeleteDateColumn()
+  deleteAt: string | null | Date;
 
   @Column("varchar", { name: "price", nullable: true, length: 255 })
   price: string | null;

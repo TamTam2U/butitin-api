@@ -19,6 +19,7 @@ import { RegisterDto } from '../dtos/Register.dto';
 import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { LocalGuard } from 'src/app/guards/local.guard';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
+import { EmailUserDto } from 'src/app/User/dtos/FindUserByEmail.dto';
 
 @ApiTags('Auth')
 @Controller('/api/auth')
@@ -31,9 +32,9 @@ export class AuthController {
     return await this.authService.login(loginDto.email, loginDto.password);
   }
 
-  @Get('/otp/:id')
-  async getOtp(@Param('id', ParseIntPipe) id: string): Promise<any> {
-    return await this.authService.getOtp(id);
+  @Post('/otp')
+  async getOtp(@Body() email: EmailUserDto): Promise<any> {
+    return await this.authService.getOtp(email);
   }
 
   @Post('/verify/:id')
