@@ -1,3 +1,4 @@
+import { OrderModule } from './app/Order/order.module';
 
 import { UserModule } from './app/User/user.module';
 import { Module } from '@nestjs/common';
@@ -13,13 +14,15 @@ import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
+    OrderModule,
     ApplicantModule,
     MenuModule,
     AuthModule,
     UserModule,
-    ConfigModule.forRoot({ isGlobal: true, load: [Configuration] }),TypeOrmModule.forRootAsync({
-      imports:[ConfigModule],
-      useClass:TypeOrmConfig,
+    ConfigModule.forRoot({ isGlobal: true, load: [Configuration] }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: TypeOrmConfig,
     }),
   ],
   controllers: [],

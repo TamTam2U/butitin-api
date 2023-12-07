@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetail } from "./OrderDetail";
 
 @Entity("order", { schema: "butitin" })
@@ -10,7 +10,7 @@ export class Order {
   noInvoice: string;
 
   @Column("varchar", { name: "orderDate", length: 255 })
-  orderDate: string;
+  orderDate: Date;
 
   @Column("varchar", {
     name: "status",
@@ -26,13 +26,14 @@ export class Order {
   total: string;
 
   @Column("varchar", { name: "createAt", length: 255 })
-  createAt: string;
+  createAt: Date | string;
 
   @Column("varchar", { name: "updateAt", nullable: true, length: 255 })
-  updateAt: string | null;
+  updateAt: Date | null  | string;
 
   @Column("varchar", { name: "deleteAt", nullable: true, length: 255 })
-  deleteAt: string | null;
+  @DeleteDateColumn()
+  deleteAt: string | null | Date;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetails: OrderDetail[];

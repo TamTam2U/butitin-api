@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./Category";
 import { OrderDetail } from "./OrderDetail";
@@ -41,7 +42,7 @@ export class Item {
   createAt: string | Date;
 
   @Column("varchar", { name: "updateAt", nullable: true, length: 255 })
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updateAt: string | null | Date;
 
   @Column("varchar", { name: "deleteAt", nullable: true, length: 255 })
