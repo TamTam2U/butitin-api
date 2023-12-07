@@ -6,6 +6,7 @@ import { OrderDetail } from 'src/app/entity/OrderDetail';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { CreateOrderDto } from '../dtos/createOrder.dto';
 import { InvoiceNumber } from 'invoice-number';
+import { CreateOrderDetailDto } from '../dtos/createOrderDetail.dto';
 
 @Injectable()
 export class OrderService {
@@ -85,8 +86,12 @@ export class OrderService {
     async setStatusRejected(id: string): Promise<Order> {
         const order = await this.findOneOrder(id);
         if(order){
-            order.status = 'rejected';
-            return await this.orderRepository.save(order);
+            if(order.status === 'paid'){
+                throw new NotFoundException('Order Sudah Dibayar');
+            }else{
+                order.status = 'rejected';
+                return await this.orderRepository.save(order);
+            }
         }else{
             throw new NotFoundException('Order Tidak Ditemukan');
         }
@@ -113,6 +118,7 @@ export class OrderService {
 
     async createOrder(newOrder: CreateOrderDto): Promise<Order | any | QueryRunner> {
         const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
         await queryRunner.startTransaction()
         try{
             const order = new Order();
@@ -126,13 +132,47 @@ export class OrderService {
                 order[key] = newOrder[key];
             }
             if(await this.orderRepository.save(order)){
+                for(let i = 0; i < newOrder.data.length; i++){
+                    const cekItem = await this.menuService.findOneItem(newOrder.data[i].itemId);
+                    if(cekItem){
+                        newOrder.data[i].itemId = cekItem.id;
+                    }else{
+                        throw new NotFoundException('Item Tidak Ditemukan');
+                    }
+                    const orderDetailData = new OrderDetail();
+                    if(cekItem.stock <= 0){
+                        throw new NotFoundException('Stok Item Habis');
+                    }else if(cekItem.stock < newOrder.data[i].qty){
+                        await queryRunner.rollbackTransaction();
+                        throw new NotFoundException('Stok Item Kurang');
+                    }else{
+                        cekItem.stock = cekItem.stock - newOrder.data[i].qty; 
+                        orderDetailData.quantity = newOrder.data[i].qty;
+                    }
+                    await this.menuService.editItem(newOrder.data[i].itemId,cekItem);
+                    newOrder.data[i].orderId = order.id;
+                    let subTotal = Number(cekItem.price) * newOrder.data[i].qty;
+                    newOrder.data[i].subTotal = subTotal.toString();
+                    newOrder.data[i].price = cekItem.price;
+                    newOrder.data[i].orderDate = order.orderDate;
+                    newOrder.data[i].createAt = new Date();
+                    for(const key in newOrder.data[i]){
+                        orderDetailData[key] = newOrder.data[i][key];
+                        
+                    }
+                    await this.orderDetailRepository.save(orderDetailData);
+                }
                 await queryRunner.commitTransaction();
+                return order;
             }else{
                 await queryRunner.rollbackTransaction();
+                throw new Error('Error');
             }
         }catch(e){
             await queryRunner.rollbackTransaction();
-            throw e;
+            throw new Error(e);
+        }finally{
+            await queryRunner.release();
         }
     }
 }
