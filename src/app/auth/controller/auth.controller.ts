@@ -32,6 +32,12 @@ export class AuthController {
     return await this.authService.login(loginDto.email, loginDto.password);
   }
 
+  @UseGuards(LocalGuard)
+  @Post('/loginUser')
+  async loginUser(@Body() loginDto: loginDto): Promise<any> {
+    return await this.authService.loginUser(loginDto.email, loginDto.password);
+  }
+
   @Post('/otp')
   async getOtp(@Body() email: EmailUserDto): Promise<any> {
     return await this.authService.getOtp(email);

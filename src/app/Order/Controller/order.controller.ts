@@ -44,6 +44,21 @@ export class OrderController {
         return await this.orderService.findAllOrderByStatusPaid();
     }
 
+    @Get('/one/orderDetail/:id')
+    async findOneOrderDetail(@Param('id') id: string) {
+        return await this.orderService.findOneOrderDetail(id);
+    }
+
+    @Get('/allOrderDetailByOrderId/:id')
+    async findAllOrderDetailByOrderId(@Param('id') id: string) {
+        return await this.orderService.findOrderDetailByOrderId(id);
+    }
+
+    @Get('/all/order/accepted/paid/rejected')
+    async findAllOrderByStatusAcceptedPaidAndRejected() {
+        return await this.orderService.findAllOrderByStatusAcceptedPaidAndRejected();
+    }
+
     @Get('/one/order/pending/:id')
     async findOneOrderByIdStatusPending(@Param('id') id: string) {
         return await this.orderService.findOneOrderByIdStatusPending(id);

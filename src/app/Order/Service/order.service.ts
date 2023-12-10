@@ -41,6 +41,13 @@ export class OrderService {
         return await this.orderRepository.find({ where: { status: 'paid', deleteAt: null } });
     }
 
+    async findAllOrderByStatusAcceptedPaidAndRejected(): Promise<Order[] | any> {
+        const accepted = await this.orderRepository.find({ where: { status: 'accepted', deleteAt: null } });
+        const paid = await this.orderRepository.find({ where: { status: 'paid', deleteAt: null } });
+        const rejected = await this.orderRepository.find({ where: { status: 'rejected', deleteAt: null } });
+        return [...accepted, ...paid, ...rejected];
+    }
+
     async findOneOrderByIdStatusPending(id: string): Promise<Order> {
         const order = await this.orderRepository.findOne({
             where: { id: id, status: 'pending', deleteAt: null },
@@ -116,6 +123,24 @@ export class OrderService {
         return String(num).padStart(length, '0');
     }
 
+    formatDate(): string {
+        const date = new Date();
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    async updateTotalOrder(id: string, total: string): Promise<Order> {
+        const order = await this.findOneOrder(id);
+        if(order){
+            order.total = total;
+            return await this.orderRepository.save(order);
+        }else{
+            throw new NotFoundException('Order Tidak Ditemukan');
+        }
+    }
+
     async createOrder(newOrder: CreateOrderDto): Promise<Order | any | QueryRunner> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -126,7 +151,7 @@ export class OrderService {
             order.noInvoice = OrderService.generateInvoiceNumber(prefix);
             order.status = 'pending';
             order.total = '0';
-            order.orderDate = new Date();
+            order.orderDate = this.formatDate();
             order.createAt = new Date();
             for (const key in newOrder) {
                 order[key] = newOrder[key];
@@ -153,6 +178,8 @@ export class OrderService {
                     newOrder.data[i].orderId = order.id;
                     let subTotal = Number(cekItem.price) * newOrder.data[i].qty;
                     newOrder.data[i].subTotal = subTotal.toString();
+                    order.total = (Number(order.total) + subTotal).toString();
+                    this.updateTotalOrder(order.id, order.total);
                     newOrder.data[i].price = cekItem.price;
                     newOrder.data[i].orderDate = order.orderDate;
                     newOrder.data[i].createAt = new Date();
@@ -174,6 +201,25 @@ export class OrderService {
         }finally{
             await queryRunner.release();
         }
+    }
+
+    async findOrderDetailByOrderId(id: string): Promise<OrderDetail[] | any> {
+        const orderDetail = await this.orderDetailRepository.find({
+            where: { orderId: id, deleteAt: null },
+        })
+        const response = [];
+        for(let i = 0; i < orderDetail.length; i++){
+            const item = await this.menuService.findOneItem(orderDetail[i].itemId);
+            orderDetail[i].item = item.name;
+            response.push(orderDetail[i]);
+        }
+        return response;
+    }
+
+    async findOneOrderDetail(id: string): Promise<OrderDetail> {
+        return await this.orderDetailRepository.findOne({
+            where: { id: id, deleteAt: null },
+        });
     }
 }
 

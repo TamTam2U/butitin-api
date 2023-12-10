@@ -1,5 +1,8 @@
 import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetail } from "./OrderDetail";
+import { Transform } from "class-transformer";
+import { moveSyntheticComments } from "typescript";
+import { StringDataType } from "sequelize";
 
 @Entity("order", { schema: "butitin" })
 export class Order {
@@ -10,7 +13,7 @@ export class Order {
   noInvoice: string;
 
   @Column("varchar", { name: "orderDate", length: 255 })
-  orderDate: Date;
+  orderDate: Date | string;
 
   @Column("varchar", {
     name: "status",

@@ -33,9 +33,9 @@ export class ApplicantController {
 
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtGuard)
-  @Get('/oneUser')
-  async findOneByUserId(@Req() req) {
-    return await this.applicantService.findOneApplicantByUserId(req.user.id);
+  @Get('/oneUser/:id')
+  async findOneByUserId(@Param('id') id: string) {
+    return await this.applicantService.findOneApplicantByUserId(id);
   }
 
   @ApiBearerAuth('JWT-auth')

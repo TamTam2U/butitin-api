@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CreateOrderDetailDto } from "./createOrderDetail.dto";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
+import { moveSyntheticComments } from "typescript";
 
 
 class orderDetail{
@@ -9,7 +10,7 @@ class orderDetail{
     itemId:string;
     subTotal:string;
     price:string;
-    orderDate:Date;
+    orderDate:string;
     createAt:Date;
 }
 
@@ -19,7 +20,7 @@ export class CreateOrderDto {
     @ApiProperty()
     name:string
 
-    orderDate:Date
+    orderDate:string
     status:string
     total:string
     createAt:Date

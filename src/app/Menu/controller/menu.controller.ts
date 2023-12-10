@@ -49,6 +49,16 @@ export class MenuController {
     return await this.menuService.findAllItemByCategoryId(id);
   }
 
+  @Get('/allItemMakanan')
+  async findAllItemMakanan() {
+    return await this.menuService.findAllItemMakanan();
+  }
+
+  @Get('/allItemMinuman')
+  async findAllItemMinuman() {
+    return await this.menuService.findAllItemMinuman();
+  }
+
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtGuard)
   @Post('/createItem')
@@ -83,7 +93,7 @@ export class MenuController {
 
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtGuard)
-  @Delete('/deleteItem/:id')
+  @Put('/deleteItem/:id')
   async deleteItem(@Param('id') id: string, @Req() req) {
     if (req.user.status === 'owner' || req.user.status === 'admin') {
       return await this.menuService.deleteItem(id);

@@ -16,7 +16,7 @@ export class EditItemDto {
   stock: number;
 
   @ApiProperty()
-  gambar: string;
+  gambar: string | null;
 
   updateAt:Date;
 }

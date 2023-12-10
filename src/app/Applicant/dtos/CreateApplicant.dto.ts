@@ -30,5 +30,5 @@ export class CreateApplicantDto {
 
   createAt: string;
   status: string;
-  userId: number;
+  userId: string;
 }

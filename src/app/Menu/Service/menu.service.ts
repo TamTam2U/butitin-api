@@ -37,6 +37,18 @@ export class MenuService {
     }
   }
 
+  async findAllItemMakanan(): Promise<Item[]> {
+    return await this.itemRepository.find({
+      where: { categoryId: '15', deleteAt: null },
+    });
+  }
+
+  async findAllItemMinuman(): Promise<Item[]> {
+    return await this.itemRepository.find({
+      where: { categoryId: '2', deleteAt: null },
+    });
+  }
+
   async findOneCategory(id: string): Promise<Category | any> {
     const category = await this.categoryRepository.findOne({
       where: { id: id, deleteAt: null },

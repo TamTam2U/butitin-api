@@ -34,27 +34,71 @@ export class AuthService {
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
-    const payload = {
-      sub: {
-        id: user.id,
-      },
-      email: user.email,
-      status: user.status,
-    };
-    if (user && user.password === password) {
-      return {
-        status: 200,
-        data: {
-          access_token: this.jwtService.sign(payload, {
-            expiresIn: '1d',
-          }),
-          refresh_token: this.jwtService.sign(payload, { expiresIn: '2d' }),
+    if(user.status === 'admin' || user.status === 'owner'){
+      const payload = {
+        sub: {
+          id: user.id,
         },
-        message: 'login success',
-        error: [],
+        email: user.email,
+        status: user.status,
       };
-    } else {
-      throw new BadRequestException('Invalid email or password');
+      if (user && user.password === password) {
+        return {
+          status: 200,
+          data: {
+            access_token: this.jwtService.sign(payload, {
+              expiresIn: '1d',
+            }),
+            refresh_token: this.jwtService.sign(payload, { expiresIn: '2d' }),
+          },
+          message: 'login success',
+          id: user.id,
+          error: [],
+        };
+      } else {
+        throw new BadRequestException('Invalid email or password');
+      }
+    }else{
+      return {
+        status: 400,
+        message: 'Anda bukan Admin Atau Owner'
+      };
+    }
+  }
+
+  async loginUser(email: string, password: string): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: { email: email },
+    });
+    if (user.status === 'user'){
+      const payload = {
+        sub: {
+          id: user.id,
+        },
+        email: user.email,
+        status: user.status,
+      };
+      if (user && user.password === password) {
+        return {
+          status: 200,
+          data: {
+            access_token: this.jwtService.sign(payload, {
+              expiresIn: '1d',
+            }),
+            refresh_token: this.jwtService.sign(payload, { expiresIn: '2d' }),
+          },
+          message: 'login success',
+          id: user.id,
+          error: [],
+        };
+      } else {
+        throw new BadRequestException('Invalid email or password');
+      }
+    }else{
+      return {
+        status: 400,
+        message: 'Anda bukan User'
+      };
     }
   }
 

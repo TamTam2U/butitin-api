@@ -54,16 +54,32 @@ export class ApplicantService {
   }
 
   async createApplicant(newApplicant: CreateApplicantDto): Promise<Applicant> {
-    const applicant = new Applicant();
-    applicant.createAt = new Date().toISOString();
-    applicant.status = 'pending';
-    for (const key in newApplicant) {
-      applicant[key] = newApplicant[key];
-    }
-    if (await this.applicantRepository.save(applicant)) {
-      return applicant;
-    } else {
-      throw new BadRequestException('Gagal Mendaftarkan Pelamar');
+    try{
+      const applicant = new Applicant();
+      applicant.createAt = new Date().toISOString();
+      applicant.status = 'pending';
+      const cekNik = await this.applicantRepository.findOne({
+        where: { nik: newApplicant.nik, deleteAt: null },
+      })
+      const cekUser = await this.applicantRepository.findOne({
+        where: { userId: newApplicant.userId, deleteAt: null },
+      })
+      if(cekUser) {
+        throw new BadRequestException('User sudah terdaftar');
+      }
+      if(cekNik) {
+        throw new BadRequestException('NIK sudah terdaftar');
+      }
+      for (const key in newApplicant) {
+        applicant[key] = newApplicant[key];
+      }
+      if (await this.applicantRepository.save(applicant)) {
+        return applicant;
+      } else {
+        throw new BadRequestException('Gagal Mendaftarkan Pelamar');
+      }
+    }catch(err){
+      throw new Error(err);
     }
   }
 
