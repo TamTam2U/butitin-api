@@ -9,12 +9,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Applicant } from 'src/app/entity/Applicant';
 import { SetStatusDto } from '../dtos/SetStatus.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class ApplicantService {
   constructor(
     @InjectRepository(Applicant)
     private readonly applicantRepository: Repository<Applicant>,
+    private readonly mailService : MailerService
   ) {}
 
   async findAllApplicant(): Promise<Applicant[]> {
@@ -89,6 +91,11 @@ export class ApplicantService {
     });
     if (applicant && applicant.status === 'pending') {
       try {
+        this.mailService.sendMail({
+          to: applicant.email,
+          subject: 'Butitin - Status Interview',
+          html: 'Selamat ' + applicant.name + ' Telah Lulus Untuk Interview',
+        })
         applicant.status = 'interview';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;
@@ -109,6 +116,11 @@ export class ApplicantService {
     });
     if (applicant && applicant.status === 'interview') {
       try {
+        this.mailService.sendMail({
+          to: applicant.email,
+          subject: 'Butitin - Status Acepted',
+          html: 'Selamat ' + applicant.name + ' Telah Diterima Untuk Pekerjaan',
+        })
         applicant.status = 'accepted';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;
@@ -129,6 +141,11 @@ export class ApplicantService {
     });
     if (applicant) {
       try {
+        this.mailService.sendMail({
+          to: applicant.email,
+          subject: 'Butitin - Status Rejected',
+          html: 'Mohon Maaf ' + applicant.name + ' Tidak Lulus Untuk Pekerjaan',
+        })
         applicant.status = 'rejected';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;

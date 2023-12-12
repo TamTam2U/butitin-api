@@ -8,9 +8,17 @@ import { jwtConstants } from '../../../constants';
 import { JwtStrategy } from '../strategies/jwt-strategy';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from '../strategies/local-strategy';
+import { MailConfig } from 'libs/mail';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
+    MailerModule.forRoot({
+      transport: {
+          host:"smtp.gmail.com",
+          auth: MailConfig
+      }
+    }),
     UserModule,
     PassportModule,
     JwtModule.register({

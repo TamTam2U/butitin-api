@@ -21,6 +21,7 @@ import { User } from 'src/app/entity/User';
 import * as otpGenerator from 'otp-generator';
 import { Repository } from 'typeorm';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private UserService: UserService,
     private jwtService: JwtService,
+    private readonly mailService : MailerService
   ) {}
 
   async login(email: string, password: string): Promise<any> {
@@ -145,6 +147,12 @@ export class AuthService {
       otp: user.otp,
     };
     if (user) {
+      this.mailService
+        .sendMail({
+          to: user.email,
+          subject: 'Butitin - OTP Verification',
+          html: 'OTP: ' + user.otp,
+        })
       return response;
     } else {
       return false;
