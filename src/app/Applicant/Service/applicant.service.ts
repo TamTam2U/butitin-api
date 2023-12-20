@@ -16,7 +16,7 @@ export class ApplicantService {
   constructor(
     @InjectRepository(Applicant)
     private readonly applicantRepository: Repository<Applicant>,
-    private readonly mailService : MailerService
+    private readonly mailService: MailerService,
   ) {}
 
   async findAllApplicant(): Promise<Applicant[]> {
@@ -24,19 +24,27 @@ export class ApplicantService {
   }
 
   async findAllApplicantByStatusPending(): Promise<Applicant[]> {
-      return await this.applicantRepository.find({ where: { status: 'pending' } });
+    return await this.applicantRepository.find({
+      where: { status: 'pending' },
+    });
   }
 
   async findAllApplicantByStatusRejected(): Promise<Applicant[]> {
-      return await this.applicantRepository.find({ where: { status: 'rejected' } });
+    return await this.applicantRepository.find({
+      where: { status: 'rejected' },
+    });
   }
 
   async findAllApplicantByStatusAccepted(): Promise<Applicant[]> {
-      return await this.applicantRepository.find({ where: { status: 'accepted' } });
+    return await this.applicantRepository.find({
+      where: { status: 'accepted' },
+    });
   }
 
   async findAllApplicantByStatusInterview(): Promise<Applicant[]> {
-      return await this.applicantRepository.find({ where: { status: 'interview' } });
+    return await this.applicantRepository.find({
+      where: { status: 'interview' },
+    });
   }
 
   async findOneApplicantById(id: string): Promise<Applicant> {
@@ -56,20 +64,20 @@ export class ApplicantService {
   }
 
   async createApplicant(newApplicant: CreateApplicantDto): Promise<Applicant> {
-    try{
+    try {
       const applicant = new Applicant();
       applicant.createAt = new Date().toISOString();
       applicant.status = 'pending';
       const cekNik = await this.applicantRepository.findOne({
         where: { nik: newApplicant.nik, deleteAt: null },
-      })
+      });
       const cekUser = await this.applicantRepository.findOne({
         where: { userId: newApplicant.userId, deleteAt: null },
-      })
-      if(cekUser) {
+      });
+      if (cekUser) {
         throw new BadRequestException('User sudah terdaftar');
       }
-      if(cekNik) {
+      if (cekNik) {
         throw new BadRequestException('NIK sudah terdaftar');
       }
       for (const key in newApplicant) {
@@ -80,7 +88,7 @@ export class ApplicantService {
       } else {
         throw new BadRequestException('Gagal Mendaftarkan Pelamar');
       }
-    }catch(err){
+    } catch (err) {
       throw new Error(err);
     }
   }
@@ -95,7 +103,7 @@ export class ApplicantService {
           to: applicant.email,
           subject: 'Butitin - Status Interview',
           html: 'Selamat ' + applicant.name + ' Telah Lulus Untuk Interview',
-        })
+        });
         applicant.status = 'interview';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;
@@ -120,7 +128,7 @@ export class ApplicantService {
           to: applicant.email,
           subject: 'Butitin - Status Acepted',
           html: 'Selamat ' + applicant.name + ' Telah Diterima Untuk Pekerjaan',
-        })
+        });
         applicant.status = 'accepted';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;
@@ -145,7 +153,7 @@ export class ApplicantService {
           to: applicant.email,
           subject: 'Butitin - Status Rejected',
           html: 'Mohon Maaf ' + applicant.name + ' Tidak Lulus Untuk Pekerjaan',
-        })
+        });
         applicant.status = 'rejected';
         if (await this.applicantRepository.save(applicant)) {
           return applicant;

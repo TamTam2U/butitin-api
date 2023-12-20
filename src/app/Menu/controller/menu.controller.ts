@@ -95,7 +95,7 @@ export class MenuController {
   @UseGuards(JwtGuard)
   @Put('/deleteItem/:id')
   async deleteItem(@Param('id') id: string, @Req() req) {
-    if (req.user.status === 'owner' || req.user.status === 'admin') {
+    if (req.user.status === 'owner') {
       return await this.menuService.deleteItem(id);
     } else {
       return {
