@@ -1,9 +1,9 @@
-import { Applicant } from "src/app/entity/Applicant";
-import { Category } from "src/app/entity/Category";
-import { Item } from "src/app/entity/Item";
-import { Order } from "src/app/entity/Order";
-import { OrderDetail } from "src/app/entity/OrderDetail";
-import { User } from "src/app/entity/User";
+import { OrderDetail } from 'src/app/entity/OrderDetail';
+import { Applicant } from 'src/app/entity/applicant';
+import { Category } from 'src/app/entity/category';
+import { Item } from 'src/app/entity/item';
+import { Order } from 'src/app/entity/order';
+import { User } from 'src/app/entity/user';
 
 export const Configuration = () => ({
   database: {
@@ -15,7 +15,7 @@ export const Configuration = () => ({
     username: process.env.DB_USERNAME || 'root',
     database: process.env.DB_DATABASE || 'butitin',
 
-    synchronize:false,
-    entities: [User,Applicant,Order,OrderDetail,Item,Category],
+    synchronize: false,
+    entities: [User, Applicant, Order, OrderDetail, Item, Category],
   },
 });

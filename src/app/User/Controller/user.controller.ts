@@ -3,8 +3,8 @@ import { UserService } from '../Service/user.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { EmailUserDto } from '../dtos/FindUserByEmail.dto';
-import { User } from 'src/app/entity/User';
 import { JwtGuard } from 'src/app/guards/jwt.guard';
+import { User } from 'src/app/entity/user';
 
 @ApiTags('User')
 @Controller('/api/user')

@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Order } from "./Order";
-import { Item } from "./Item";
+import { Order } from "./order";
+import { Item } from "./item";
 
 @Index("itemId", ["itemId"], {})
 @Index("orderId", ["orderId"], {})

@@ -1,15 +1,14 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateApplicantDto } from '../dtos/CreateApplicant.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Applicant } from 'src/app/entity/Applicant';
 import { SetStatusDto } from '../dtos/SetStatus.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Applicant } from 'src/app/entity/applicant';
 
 @Injectable()
 export class ApplicantService {

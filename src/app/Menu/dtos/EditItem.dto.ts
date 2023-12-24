@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
-import { Item } from "src/app/entity/Item";
 
 export class EditItemDto {
   @ApiProperty()

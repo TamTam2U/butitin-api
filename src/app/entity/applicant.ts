@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { User } from "./user";
 
 @Index("userId", ["userId"], {})
 @Entity("applicant", { schema: "butitin" })

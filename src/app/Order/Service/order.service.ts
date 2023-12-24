@@ -1,12 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MenuService } from 'src/app/Menu/Service/menu.service';
-import { Order } from 'src/app/entity/Order';
 import { OrderDetail } from 'src/app/entity/OrderDetail';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { CreateOrderDto } from '../dtos/createOrder.dto';
 import { InvoiceNumber } from 'invoice-number';
 import { CreateOrderDetailDto } from '../dtos/createOrderDetail.dto';
+import { Order } from 'src/app/entity/order';
 
 @Injectable()
 export class OrderService {

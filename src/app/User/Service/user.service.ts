@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
 import { EmailUserDto } from '../dtos/FindUserByEmail.dto';
-import { User } from 'src/app/entity/User';
+import { User } from 'src/app/entity/user';
 
 @Injectable()
 export class UserService {

@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Item } from './Item';
+import { Item } from './item';
 
 @Entity('category', { schema: 'butitin' })
 export class Category {

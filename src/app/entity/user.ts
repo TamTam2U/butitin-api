@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Applicant } from "./Applicant";
+import { Applicant } from "./applicant";
 
 @Index("email", ["email"], { unique: true })
 @Entity("user", { schema: "butitin" })

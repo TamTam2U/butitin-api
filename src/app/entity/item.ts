@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Category } from "./Category";
+import { Category } from "./category";
 import { OrderDetail } from "./OrderDetail";
 
 @Index("categoryId", ["categoryId"], {})

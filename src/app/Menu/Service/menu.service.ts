@@ -4,11 +4,11 @@ import { CreateItemDto } from '../dtos/CreateItemdto';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { EditCategoryDto } from '../dtos/EditCategory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/app/entity/Category';
 import { Repository } from 'typeorm';
-import { Item } from 'src/app/entity/Item';
 import { isElementAccessExpression } from 'typescript';
 import { EditItemDto } from '../dtos/EditItem.dto';
+import { Category } from 'src/app/entity/category';
+import { Item } from 'src/app/entity/item';
 
 @Injectable()
 export class MenuService {

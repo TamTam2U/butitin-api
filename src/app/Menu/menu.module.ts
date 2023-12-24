@@ -3,10 +3,10 @@ import { JwtStrategy } from '../strategies';
 import { MenuController } from './controller/menu.controller';
 import { MenuService } from './Service/menu.service';
 import { Module } from '@nestjs/common';
-import { Item } from '../entity/Item';
-import { Order } from '../entity/Order';
 import { OrderDetail } from '../entity/OrderDetail';
-import { Category } from '../entity/Category';
+import { Item } from '../entity/item';
+import { Order } from '../entity/order';
+import { Category } from '../entity/category';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Item,Order,OrderDetail,Category])],

@@ -17,11 +17,11 @@ import { ValidationFailed } from 'sequelize-typescript';
 import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { EmailUserDto } from 'src/app/User/dtos/FindUserByEmail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/entity/User';
 import * as otpGenerator from 'otp-generator';
 import { Repository } from 'typeorm';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { User } from 'src/app/entity/user';
 
 @Injectable()
 export class AuthService {
@@ -29,14 +29,14 @@ export class AuthService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private UserService: UserService,
     private jwtService: JwtService,
-    private readonly mailService : MailerService
+    private readonly mailService: MailerService,
   ) {}
 
   async login(email: string, password: string): Promise<any> {
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
-    if(user.status === 'admin' || user.status === 'owner'){
+    if (user.status === 'admin' || user.status === 'owner') {
       const payload = {
         sub: {
           id: user.id,
@@ -60,10 +60,10 @@ export class AuthService {
       } else {
         throw new BadRequestException('Invalid email or password');
       }
-    }else{
+    } else {
       return {
         status: 400,
-        message: 'Anda bukan Admin Atau Owner'
+        message: 'Anda bukan Admin Atau Owner',
       };
     }
   }
@@ -72,7 +72,7 @@ export class AuthService {
     const user = await this.userRepository.findOne({
       where: { email: email },
     });
-    if (user.status === 'user'){
+    if (user.status === 'user') {
       const payload = {
         sub: {
           id: user.id,
@@ -96,10 +96,10 @@ export class AuthService {
       } else {
         throw new BadRequestException('Invalid email or password');
       }
-    }else{
+    } else {
       return {
         status: 400,
-        message: 'Anda bukan User'
+        message: 'Anda bukan User',
       };
     }
   }
@@ -141,23 +141,25 @@ export class AuthService {
 
   async getOtp(email: EmailUserDto): Promise<any> {
     const user = await this.UserService.findOneByEmail(email);
-    let response = {
+    const response = {
       id: user.id,
       email: user.email,
       otp: user.otp,
     };
     if (user) {
-      this.mailService
-        .sendMail({
-          to: user.email,
-          subject: 'Butitin - OTP Verification',
-          html: 'OTP: ' + user.otp,
-        })
+      this.mailService.sendMail({
+        to: user.email,
+        subject: 'Butitin - OTP Verification',
+        html: 'OTP: ' + user.otp,
+      });
       return response;
     } else {
       return false;
     }
   }
+
+  
+
 
   async verifyOtp(id: string, otp: string): Promise<any> {
     const user = await this.UserService.findOne(id);
@@ -205,7 +207,7 @@ export class AuthService {
             message: 'Password Berhasil Reset',
             data: [],
             error: [],
-          }
+          };
           return response;
         }
       } catch (error) {
