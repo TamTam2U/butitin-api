@@ -16,8 +16,8 @@
 
 
 -- Dumping database structure for butitin
-CREATE DATABASE IF NOT EXISTS `butitin` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `butitin`;
+CREATE DATABASE IF NOT EXISTS `butitin-test` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `butitin-testapplicantapplicant`;
 
 -- Dumping structure for table butitin.applicant
 CREATE TABLE IF NOT EXISTS `applicant` (

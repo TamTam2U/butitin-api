@@ -1,3 +1,5 @@
+USE butitin;
+
 CREATE TABLE `user` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT "user",

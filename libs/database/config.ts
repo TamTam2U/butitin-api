@@ -13,7 +13,7 @@ export const Configuration = () => ({
 
     password: process.env.DB_PASSWORD || '',
     username: process.env.DB_USERNAME || 'root',
-    database: process.env.DB_DATABASE || 'butitin',
+    database: process.env.DB_DATABASE || 'butitin-test',
 
     synchronize: false,
     entities: [User, Applicant, Order, OrderDetail, Item, Category],
