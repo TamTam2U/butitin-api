@@ -16,7 +16,6 @@ import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { EditCategoryDto } from '../dtos/EditCategory.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/app/guards/jwt.guard';
-import { Int32 } from 'typeorm';
 import { EditItemDto } from '../dtos/EditItem.dto';
 
 @ApiTags('Menu')
