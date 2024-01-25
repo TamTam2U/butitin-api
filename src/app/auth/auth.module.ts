@@ -8,8 +8,8 @@ import { jwtConstants } from '../../../constants';
 import { JwtStrategy } from '../strategies/jwt-strategy';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from '../strategies/local-strategy';
-import { MailConfig } from 'libs/mail';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { MailConfig } from 'src/libs/mail';
 
 @Module({
   imports: [
