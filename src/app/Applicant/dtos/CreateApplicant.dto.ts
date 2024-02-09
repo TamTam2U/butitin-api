@@ -5,7 +5,6 @@ export class CreateApplicantDto {
   @ApiProperty()
   @IsNotEmpty()
   name: string;
-  
   @ApiProperty()
   @IsNotEmpty()
   nik: string;

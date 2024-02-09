@@ -1,11 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 // import { category, item } from 'src/app/entity';
 import { CreateItemDto } from '../dtos/CreateItemdto';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { EditCategoryDto } from '../dtos/EditCategory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { isElementAccessExpression } from 'typescript';
 import { EditItemDto } from '../dtos/EditItem.dto';
 import { Category } from 'src/app/entity/category';
 import { Item } from 'src/app/entity/item';

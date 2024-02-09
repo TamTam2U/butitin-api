@@ -4,8 +4,8 @@ import { Module } from '@nestjs/common';
 import { ApplicantController } from './Controller/applicant.controller';
 import { JwtStrategy } from '../strategies';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { MailConfig } from 'libs/mail';
 import { Applicant } from '../entity/applicant';
+import { MailConfig } from 'src/libs/mail';
 
 @Module({
   imports: [

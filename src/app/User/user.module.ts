@@ -12,7 +12,7 @@ import { User } from '../entity/user';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [UserService,JwtStrategy],
-  exports: [UserService,TypeOrmModule.forFeature([User])],
+  providers: [UserService, JwtStrategy],
+  exports: [UserService, TypeOrmModule.forFeature([User])],
 })
 export class UserModule {}

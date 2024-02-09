@@ -11,7 +11,7 @@ export const Configuration = () => ({
     type: 'mysql',
     host: process.env.DB_HOST || 'localhost',
 
-    password: process.env.DB_PASSWORD || '',
+    password: process.env.DB_PASSWORD || 'password',
     username: process.env.DB_USERNAME || 'root',
     database: process.env.DB_DATABASE || 'butitin-test',
 

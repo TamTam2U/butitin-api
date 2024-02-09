@@ -1,20 +1,11 @@
 import {
   BadRequestException,
-  ClassSerializerInterceptor,
-  Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
-  UseInterceptors,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Exclude } from 'class-transformer';
-import { UserService } from 'src/app/User/Service/user.service';
-import { CreateUserDto } from 'src/app/User/dtos/CreateUser.dto';
 // import { user } from 'src/app/entity';
 import { RegisterDto } from '../dtos/Register.dto';
-import { ValidationFailed } from 'sequelize-typescript';
-import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { EmailUserDto } from 'src/app/User/dtos/FindUserByEmail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as otpGenerator from 'otp-generator';
@@ -22,12 +13,13 @@ import { Repository } from 'typeorm';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from 'src/app/entity/user';
+import { UserService } from 'src/app/User/Service/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private UserService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
     private readonly mailService: MailerService,
   ) {}
@@ -109,7 +101,7 @@ export class AuthService {
       where: { email: email },
     });
     if (user && user.password === pass) {
-      const { password, ...result } = user;
+      const { ...result } = user;
       return result;
     }
     return null;
@@ -140,7 +132,7 @@ export class AuthService {
   }
 
   async getOtp(email: EmailUserDto): Promise<any> {
-    const user = await this.UserService.findOneByEmail(email);
+    const user = await this.userService.findOneByEmail(email);
     const response = {
       id: user.id,
       email: user.email,
@@ -158,11 +150,8 @@ export class AuthService {
     }
   }
 
-  
-
-
   async verifyOtp(id: string, otp: string): Promise<any> {
-    const user = await this.UserService.findOne(id);
+    const user = await this.userService.findOne(id);
     if (user) {
       if (user.otp === otp) {
         return {

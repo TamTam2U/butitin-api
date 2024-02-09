@@ -1,14 +1,12 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Req,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApplicantService } from '../Service/applicant.service';

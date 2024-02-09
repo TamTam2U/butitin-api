@@ -1,20 +1,15 @@
 import {
-  BadRequestException,
   Body,
-  ClassSerializerInterceptor,
   Controller,
-  Get,
   Param,
   ParseIntPipe,
   Post,
-  Req,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { loginDto } from '../dtos/Login.dto';
 import { VerifyOtpDto } from '../dtos/VerifyOtp.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from '../dtos/Register.dto';
 import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { LocalGuard } from 'src/app/guards/local.guard';
@@ -28,14 +23,14 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('/login')
-  async login(@Body() loginDto: loginDto, @Req() req): Promise<any> {
-    return await this.authService.login(loginDto.email, loginDto.password);
+  async login(@Body() LoginDto: loginDto): Promise<any> {
+    return await this.authService.login(LoginDto.email, LoginDto.password);
   }
 
   @UseGuards(LocalGuard)
   @Post('/loginUser')
-  async loginUser(@Body() loginDto: loginDto): Promise<any> {
-    return await this.authService.loginUser(loginDto.email, loginDto.password);
+  async loginUser(@Body() LoginDto: loginDto): Promise<any> {
+    return await this.authService.loginUser(LoginDto.email, LoginDto.password);
   }
 
   @Post('/otp')

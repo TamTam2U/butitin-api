@@ -4,9 +4,9 @@ import { TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 @Injectable()
 export class TypeOrmConfig implements TypeOrmOptionsFactory {
-	constructor (private configService: ConfigService) {}
+  constructor(private configService: ConfigService) {}
 
-	createTypeOrmOptions () {
-		return this.configService.get('database');
-	}
+  createTypeOrmOptions() {
+    return this.configService.get('database');
+  }
 }

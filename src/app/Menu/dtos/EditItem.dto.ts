@@ -1,5 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class EditItemDto {
   @ApiProperty()
@@ -17,5 +16,5 @@ export class EditItemDto {
   @ApiProperty()
   gambar: string | null;
 
-  updateAt:Date;
+  updateAt: Date;
 }
