@@ -2,7 +2,6 @@ import { AuthController } from './controller/auth.controller';
 import { UserModule } from '../User/user.module';
 import { AuthService } from './service/auth.service';
 import { Module } from '@nestjs/common';
-import { UserService } from '../User/Service/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../../../constants';
 import { JwtStrategy } from '../strategies/jwt-strategy';
@@ -15,9 +14,9 @@ import { MailConfig } from 'src/libs/mail';
   imports: [
     MailerModule.forRoot({
       transport: {
-          host:"smtp.gmail.com",
-          auth: MailConfig
-      }
+        host: 'smtp.gmail.com',
+        auth: MailConfig,
+      },
     }),
     UserModule,
     PassportModule,
@@ -27,11 +26,7 @@ import { MailConfig } from 'src/libs/mail';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-  ],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   // exports:[LocalStrategy]
 })
 export class AuthModule {}

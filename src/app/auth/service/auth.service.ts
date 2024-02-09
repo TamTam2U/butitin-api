@@ -19,7 +19,7 @@ import { UserService } from 'src/app/User/Service/user.service';
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private UserService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
     private readonly mailService: MailerService,
   ) {}
@@ -101,7 +101,7 @@ export class AuthService {
       where: { email: email },
     });
     if (user && user.password === pass) {
-      const { password, ...result } = user;
+      const { ...result } = user;
       return result;
     }
     return null;
@@ -132,7 +132,7 @@ export class AuthService {
   }
 
   async getOtp(email: EmailUserDto): Promise<any> {
-    const user = await this.UserService.findOneByEmail(email);
+    const user = await this.userService.findOneByEmail(email);
     const response = {
       id: user.id,
       email: user.email,
@@ -151,7 +151,7 @@ export class AuthService {
   }
 
   async verifyOtp(id: string, otp: string): Promise<any> {
-    const user = await this.UserService.findOne(id);
+    const user = await this.userService.findOne(id);
     if (user) {
       if (user.otp === otp) {
         return {

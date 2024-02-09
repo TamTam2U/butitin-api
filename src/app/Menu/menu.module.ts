@@ -9,9 +9,12 @@ import { Order } from '../entity/order';
 import { Category } from '../entity/category';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Item,Order,OrderDetail,Category])],
+  imports: [TypeOrmModule.forFeature([Item, Order, OrderDetail, Category])],
   controllers: [MenuController],
-  providers: [MenuService,JwtStrategy],
-  exports:[MenuService,TypeOrmModule.forFeature([Item,Order,OrderDetail,Category])],
+  providers: [MenuService, JwtStrategy],
+  exports: [
+    MenuService,
+    TypeOrmModule.forFeature([Item, Order, OrderDetail, Category]),
+  ],
 })
 export class MenuModule {}

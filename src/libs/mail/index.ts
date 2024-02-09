@@ -1,3 +1,3 @@
-import { MailConfig } from "./mail";
+import { MailConfig } from './mail';
 
-export { MailConfig }
+export { MailConfig };

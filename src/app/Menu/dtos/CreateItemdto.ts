@@ -22,5 +22,5 @@ export class CreateItemDto {
   @ApiProperty()
   categoryId: string;
 
-  createAt:string;
+  createAt: string;
 }
