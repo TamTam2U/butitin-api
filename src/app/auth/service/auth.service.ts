@@ -1,20 +1,11 @@
 import {
   BadRequestException,
-  ClassSerializerInterceptor,
-  Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
-  UseInterceptors,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Exclude } from 'class-transformer';
-import { UserService } from 'src/app/User/Service/user.service';
-import { CreateUserDto } from 'src/app/User/dtos/CreateUser.dto';
 // import { user } from 'src/app/entity';
 import { RegisterDto } from '../dtos/Register.dto';
-import { ValidationFailed } from 'sequelize-typescript';
-import { NewPasswordDto } from '../dtos/NewPassword.dto';
 import { EmailUserDto } from 'src/app/User/dtos/FindUserByEmail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as otpGenerator from 'otp-generator';
@@ -22,6 +13,7 @@ import { Repository } from 'typeorm';
 import { RefreshTokenDto } from '../dtos/RefreshToken.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from 'src/app/entity/user';
+import { UserService } from 'src/app/User/Service/user.service';
 
 @Injectable()
 export class AuthService {
@@ -157,9 +149,6 @@ export class AuthService {
       return false;
     }
   }
-
-  
-
 
   async verifyOtp(id: string, otp: string): Promise<any> {
     const user = await this.UserService.findOne(id);
